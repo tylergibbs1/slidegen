@@ -93,7 +93,9 @@ Color (exact Geist dark-mode tokens):
 - Destructive: #FF5B5B
 - Chart palette when data visualization is needed: amber #FFAE04, blue #2671F4, gray #747474, dim #525252, light #E4E4E4
 - No gradients. No glow effects. No colored fills beyond the token system. Purely flat, solid colors
-- Monochrome foundation: white text on black, with the gray token scale for layering
+- The accent color for emphasis is pure white (#FFFFFF) — never orange, never warm colors. When the prompt says "accent," use white or bright white against the black/dark gray background
+- Horizontal rules or dividers should be white or light gray (#A4A4A4), never orange or colored
+- Monochrome foundation: white text on black, with the gray token scale for layering. The entire slide should feel cold, precise, monochrome — no warm tones anywhere
 Visual style:
 - Swiss grid underpins everything: structured columns and rows bring order and rhythm, the grid is itself part of the aesthetic
 - If diagrams are present: thin white lines, sharp corners, no rounded edges, minimal nodes connected by clean straight or right-angle lines
