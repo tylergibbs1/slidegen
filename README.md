@@ -2,6 +2,10 @@
 
 An agent-first CLI for generating PowerPoint presentations. Give it prompts, get slides.
 
+<p align="center">
+  <img src="examples/preview-engineer.jpg" width="100%" alt="slidegen example — engineer style" />
+</p>
+
 Built for AI agents (Claude Code, Cursor, Codex, etc.) to create decks as part of automated workflows. Two commands, structured JSON output, stdin support, zero config beyond an API key.
 
 ## How it works
@@ -77,11 +81,23 @@ slidegen slide "Title slide: Q4 RESULTS" -s apple
 slidegen slide "Title slide: Q4 RESULTS" -s vercel
 ```
 
-| Style | Look | Background | Accent |
-|-------|------|------------|--------|
-| `engineer` | Dark engineering notebook, hand-sketched line art | Black `#000` | Orange `#F97316` |
-| `apple` | Clean Apple keynote, SF Pro typography, vast whitespace | White `#F5F5F7` | Blue `#0071E3` |
-| `vercel` | Dark developer aesthetic, sharp monochrome with glow | Black `#000` | White glow |
+<table>
+  <tr>
+    <td align="center"><strong>engineer</strong></td>
+    <td align="center"><strong>apple</strong></td>
+    <td align="center"><strong>vercel</strong></td>
+  </tr>
+  <tr>
+    <td><img src="examples/preview-engineer.jpg" width="100%" alt="engineer style" /></td>
+    <td><img src="examples/preview-apple.jpg" width="100%" alt="apple style" /></td>
+    <td><img src="examples/preview-vercel.jpg" width="100%" alt="vercel style" /></td>
+  </tr>
+  <tr>
+    <td>Dark engineering notebook, hand-sketched line art, orange accent</td>
+    <td>Clean Apple keynote, SF Pro typography, blue accent</td>
+    <td>Geist design system, Swiss grid, flat monochrome</td>
+  </tr>
+</table>
 
 Styles are prepended to your prompt automatically. You can still pass raw prompts without `-s` for full control.
 
