@@ -119,9 +119,13 @@ Options:
 - **No interactivity** — no prompts, no confirmators, no TUI. Just input and output
 - **Parallel generation** — run multiple `slide` commands concurrently, assemble once
 
-## Example
+## Examples
 
-See [`examples/breadcrumb.pptx`](examples/breadcrumb.pptx) for a 10-slide deck generated entirely by an AI agent using slidegen.
+10-slide BREADCRUMB deck generated entirely by an AI agent using slidegen, one per built-in style:
+
+- [`breadcrumb-engineer.pptx`](examples/breadcrumb-engineer.pptx) — dark engineering notebook
+- [`breadcrumb-apple.pptx`](examples/breadcrumb-apple.pptx) — clean Apple keynote
+- [`breadcrumb-vercel.pptx`](examples/breadcrumb-vercel.pptx) — dark Vercel developer aesthetic
 
 ## Exit codes
 
