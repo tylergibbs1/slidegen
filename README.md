@@ -90,7 +90,7 @@ slidegen slide "Title slide: Q4 RESULTS" -s vercel
   <tr>
     <td><img src="examples/preview-engineer.jpg" width="100%" alt="engineer style" /></td>
     <td><img src="examples/preview-apple.jpg" width="100%" alt="apple style" /></td>
-    <td><img src="examples/preview-vercel.jpg" width="100%" alt="vercel style" /></td>
+    <td><img src="examples/preview-vercel.jpg?v=2" width="100%" alt="vercel style" /></td>
   </tr>
   <tr>
     <td>Dark engineering notebook, hand-sketched line art, orange accent</td>
