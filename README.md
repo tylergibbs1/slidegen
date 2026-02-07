@@ -3,7 +3,7 @@
 An agent-first CLI for generating PowerPoint presentations. Give it prompts, get slides.
 
 <p align="center">
-  <img src="examples/preview-engineer.jpg" width="100%" alt="slidegen example — engineer style" />
+  <img src="examples/hero.jpg" width="100%" alt="slidegen — give it prompts, get slides" />
 </p>
 
 Built for AI agents (Claude Code, Cursor, Codex, etc.) to create decks as part of automated workflows. Two commands, structured JSON output, stdin support, zero config beyond an API key.
