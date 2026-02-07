@@ -67,6 +67,24 @@ $ slidegen assemble ./slides -f json
 {"status":"done","output":"./deck.pptx","slides":5,"bytes":2516582}
 ```
 
+## Built-in styles
+
+Skip the prompt engineering. Use `-s` to apply a batteries-included visual style:
+
+```bash
+slidegen slide "Title slide: Q4 RESULTS" -s engineer
+slidegen slide "Title slide: Q4 RESULTS" -s apple
+slidegen slide "Title slide: Q4 RESULTS" -s vercel
+```
+
+| Style | Look | Background | Accent |
+|-------|------|------------|--------|
+| `engineer` | Dark engineering notebook, hand-sketched line art | Black `#000` | Orange `#F97316` |
+| `apple` | Clean Apple keynote, SF Pro typography, vast whitespace | White `#F5F5F7` | Blue `#0071E3` |
+| `vercel` | Dark developer aesthetic, sharp monochrome with glow | Black `#000` | White glow |
+
+Styles are prepended to your prompt automatically. You can still pass raw prompts without `-s` for full control.
+
 ## Commands
 
 ### `slide`
@@ -77,6 +95,7 @@ slidegen slide <prompt> [options]
 Options:
   -d, --dir <path>     Output directory (default: ./slides)
   -n, --name <name>    File name without extension (default: auto-increment)
+  -s, --style <name>   Built-in style preset (engineer, apple, vercel)
   -m, --model <model>  Gemini model (default: gemini-3-pro-image-preview)
   -f, --format <fmt>   Output format: text or json (default: text)
 ```

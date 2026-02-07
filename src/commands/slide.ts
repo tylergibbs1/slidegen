@@ -2,6 +2,7 @@ import { mkdir, readdir, writeFile } from "fs/promises";
 import { join, extname } from "path";
 import { generateSlideImage } from "../lib/gemini";
 import { logSlideDone, logSlideFail } from "../lib/logger";
+import { getStyle } from "../lib/styles";
 import type { SlideOptions } from "../lib/types";
 import { EXIT_SUCCESS, EXIT_GENERATION_FAIL, EXIT_INPUT_ERROR } from "../lib/types";
 
@@ -37,11 +38,21 @@ async function getNextName(dir: string): Promise<string> {
 }
 
 export async function runSlide(opts: SlideOptions): Promise<number> {
-  const { prompt, dir, model, format } = opts;
+  const { dir, model, format } = opts;
+  let { prompt } = opts;
 
   if (!prompt.trim()) {
     logSlideFail(format, "No prompt provided", 0);
     return EXIT_INPUT_ERROR;
+  }
+
+  if (opts.style) {
+    const style = getStyle(opts.style);
+    if (!style) {
+      logSlideFail(format, `Unknown style: ${opts.style}. Available: engineer, apple, vercel`, 0);
+      return EXIT_INPUT_ERROR;
+    }
+    prompt = style.prefix + prompt;
   }
 
   const start = performance.now();

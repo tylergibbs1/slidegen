@@ -10,6 +10,7 @@ export interface SlideOptions {
   name?: string;
   model: string;
   format: OutputFormat;
+  style?: string;
 }
 
 export interface AssembleOptions {

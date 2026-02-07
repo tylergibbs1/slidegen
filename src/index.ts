@@ -32,9 +32,15 @@ Usage:
 Options:
   -d, --dir <path>     Output directory (default: ./slides)
   -n, --name <name>    File name without extension (default: auto-increment)
+  -s, --style <name>   Built-in style preset (engineer, apple, vercel)
   -m, --model <model>  Gemini model to use
   -f, --format <fmt>   Output format: text or json (default: text)
-  -h, --help           Show this help`;
+  -h, --help           Show this help
+
+Styles:
+  engineer   Dark engineering notebook, white line art, orange (#F97316) accent
+  apple      Clean white keynote, SF Pro typography, blue (#0071E3) accent
+  vercel     Dark developer aesthetic, sharp lines, monochrome with glow`;
 
 const ASSEMBLE_HELP = `slidegen assemble — combine images into a PowerPoint file
 
@@ -92,6 +98,7 @@ async function main(): Promise<number> {
 
     const dir = parseFlag(args, "-d", "--dir") ?? "./slides";
     const name = parseFlag(args, "-n", "--name");
+    const style = parseFlag(args, "-s", "--style");
     const model = parseFlag(args, "-m", "--model") ?? "gemini-3-pro-image-preview";
     const format = (parseFlag(args, "-f", "--format") ?? "text") as OutputFormat;
 
@@ -106,7 +113,7 @@ async function main(): Promise<number> {
       return EXIT_INPUT_ERROR;
     }
 
-    return runSlide({ prompt, dir, name, model, format });
+    return runSlide({ prompt, dir, name, style, model, format });
   }
 
   if (command === "assemble") {
