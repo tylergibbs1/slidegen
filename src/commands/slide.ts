@@ -1,6 +1,6 @@
 import { mkdir, readdir, writeFile } from "fs/promises";
 import { join, extname } from "path";
-import { generateSlideImage } from "../lib/gemini";
+import { generateSlideImage } from "../lib/image";
 import { logSlideDone, logSlideFail } from "../lib/logger";
 import { getStyle } from "../lib/styles";
 import type { SlideOptions } from "../lib/types";
@@ -61,7 +61,12 @@ export async function runSlide(opts: SlideOptions): Promise<number> {
     await mkdir(dir, { recursive: true });
 
     const name = opts.name ?? (await getNextName(dir));
-    const result = await generateSlideImage(prompt, model);
+    const result = await generateSlideImage({
+      prompt,
+      model,
+      provider: opts.provider,
+      size: opts.size,
+    });
     const ext = mimeToExt(result.mimeType);
     const filename = `${name}${ext}`;
     const filePath = join(dir, filename);

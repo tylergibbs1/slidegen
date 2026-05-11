@@ -10,7 +10,7 @@ Built for AI agents (Claude Code, Cursor, Codex, etc.) to create decks as part o
 
 ## How it works
 
-1. **`slide`** — sends a text prompt to Google Gemini's image generation model, saves the result as an image
+1. **`slide`** — sends a text prompt to Google Gemini or OpenAI's image generation model, saves the result as an image
 2. **`assemble`** — takes a directory of images and packs them into a 16:9 full-bleed `.pptx`
 
 That's it. Generate slides in parallel, assemble when done.
@@ -32,10 +32,11 @@ cd slidegen
 bun install
 ```
 
-Set your Gemini API key:
+Set the API key for the provider you want to use:
 
 ```bash
 export GEMINI_API_KEY=your_key_here
+export OPENAI_API_KEY=your_key_here
 ```
 
 ## Usage
@@ -51,6 +52,10 @@ echo "A minimalist title slide reading HELLO WORLD" | slidegen slide
 
 # With options
 slidegen slide "Your prompt" -d ./slides -n 01 -m gemini-3-pro-image-preview
+
+# With OpenAI image generation 2.0
+slidegen slide "A clean 16:9 product strategy slide" --provider openai
+slidegen slide "A clean 16:9 product strategy slide" -m gpt-image-2
 ```
 
 ### Assemble into PowerPoint
@@ -112,9 +117,15 @@ Options:
   -d, --dir <path>     Output directory (default: ./slides)
   -n, --name <name>    File name without extension (default: auto-increment)
   -s, --style <name>   Built-in style preset (engineer, apple, vercel)
-  -m, --model <model>  Gemini model (default: gemini-3-pro-image-preview)
+  -p, --provider <p>   Image provider: gemini or openai (default: inferred from model)
+  -m, --model <model>  Image model (default: gemini-3-pro-image-preview; OpenAI default: gpt-image-2)
+      --size <size>    OpenAI image size (default: 1536x864 for gpt-image-2)
   -f, --format <fmt>   Output format: text or json (default: text)
 ```
+
+OpenAI support uses `gpt-image-2` by default when `--provider openai` is selected.
+Passing `-m gpt-image-2` also selects the OpenAI provider automatically. The default
+OpenAI size is `1536x864`, a 16:9 resolution supported by `gpt-image-2`.
 
 ### `assemble`
 

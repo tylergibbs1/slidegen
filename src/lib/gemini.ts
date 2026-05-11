@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const DEFAULT_MODEL = "gemini-3-pro-image-preview";
+export const DEFAULT_GEMINI_MODEL = "gemini-3-pro-image-preview";
 
 interface GenerateImageResult {
   imageData: Buffer;
@@ -20,7 +20,7 @@ export async function generateSlideImage(
   const ai = new GoogleGenAI({ apiKey });
 
   const response = await ai.models.generateContent({
-    model: model ?? DEFAULT_MODEL,
+    model: model ?? DEFAULT_GEMINI_MODEL,
     contents: prompt,
     config: {
       responseModalities: ["IMAGE", "TEXT"],

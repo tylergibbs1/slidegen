@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
-import { mkdir, writeFile, rm, exists } from "fs/promises";
+import { access, mkdir, writeFile, rm } from "fs/promises";
 import { join } from "path";
 import { assembleSlides } from "../src/lib/assembler";
 
@@ -14,6 +14,15 @@ function createTestPng(): Buffer {
     "base64",
   );
   return png;
+}
+
+async function exists(path: string): Promise<boolean> {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 describe("assembler", () => {

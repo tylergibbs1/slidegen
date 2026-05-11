@@ -2,7 +2,8 @@
 
 import { runSlide } from "./commands/slide";
 import { runAssemble } from "./commands/assemble";
-import type { OutputFormat } from "./lib/types";
+import { defaultModelForProvider, inferImageProvider } from "./lib/image";
+import type { ImageProvider, OutputFormat } from "./lib/types";
 import { EXIT_INPUT_ERROR } from "./lib/types";
 
 const HELP = `slidegen — generate slide images and assemble PowerPoint decks
@@ -16,7 +17,8 @@ Commands:
   assemble Combine a directory of images into a PowerPoint file
 
 Environment:
-  GEMINI_API_KEY   Google Gemini API key (required for slide command)
+  GEMINI_API_KEY   Google Gemini API key (required for Gemini slide generation)
+  OPENAI_API_KEY   OpenAI API key (required for OpenAI slide generation)
 
 Exit codes:
   0  Success
@@ -33,7 +35,9 @@ Options:
   -d, --dir <path>     Output directory (default: ./slides)
   -n, --name <name>    File name without extension (default: auto-increment)
   -s, --style <name>   Built-in style preset (engineer, apple, vercel)
-  -m, --model <model>  Gemini model to use
+  -p, --provider <p>   Image provider: gemini or openai (default: inferred from model)
+  -m, --model <model>  Image model to use (default: gemini-3-pro-image-preview)
+      --size <size>    OpenAI image size (default: 1536x864 for gpt-image-2)
   -f, --format <fmt>   Output format: text or json (default: text)
   -h, --help           Show this help
 
@@ -72,6 +76,18 @@ function hasFlag(args: string[], short: string, long: string): boolean {
   return false;
 }
 
+function parseProvider(value: string | undefined): ImageProvider | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  if (value === "gemini" || value === "openai") {
+    return value;
+  }
+
+  throw new Error(`Invalid provider: ${value}. Expected gemini or openai.`);
+}
+
 async function readStdin(): Promise<string> {
   const chunks: Buffer[] = [];
   for await (const chunk of process.stdin) {
@@ -99,8 +115,18 @@ async function main(): Promise<number> {
     const dir = parseFlag(args, "-d", "--dir") ?? "./slides";
     const name = parseFlag(args, "-n", "--name");
     const style = parseFlag(args, "-s", "--style");
-    const model = parseFlag(args, "-m", "--model") ?? "gemini-3-pro-image-preview";
+    let provider: ImageProvider | undefined;
+    try {
+      provider = parseProvider(parseFlag(args, "-p", "--provider"));
+    } catch (err) {
+      console.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
+      return EXIT_INPUT_ERROR;
+    }
+    const parsedModel = parseFlag(args, "-m", "--model");
+    const size = parseFlag(args, "", "--size");
     const format = (parseFlag(args, "-f", "--format") ?? "text") as OutputFormat;
+    const model = parsedModel ?? defaultModelForProvider(provider ?? "gemini");
+    provider = inferImageProvider(model, provider);
 
     let prompt = args.join(" ");
     if (!prompt && !process.stdin.isTTY) {
@@ -113,7 +139,7 @@ async function main(): Promise<number> {
       return EXIT_INPUT_ERROR;
     }
 
-    return runSlide({ prompt, dir, name, style, model, format });
+    return runSlide({ prompt, dir, name, style, model, provider, size, format });
   }
 
   if (command === "assemble") {
