@@ -6,7 +6,7 @@ An agent-first CLI for generating PowerPoint presentations. Give it prompts, get
   <img src="examples/hero.jpg" width="100%" alt="slidegen — give it prompts, get slides" />
 </p>
 
-Built for AI agents (Claude Code, Cursor, Codex, etc.) to create decks as part of automated workflows. Two commands, structured JSON output, stdin support, zero config beyond an API key.
+Built for AI agents (Claude Code, Cursor, Codex, etc.) to create decks as part of automated workflows. Two commands, structured JSON output, stdin support, and provider selection for Gemini or OpenAI image generation.
 
 ## How it works
 
@@ -32,10 +32,15 @@ cd slidegen
 bun install
 ```
 
-Set the API key for the provider you want to use:
+Set the API key for the provider you want to use. Gemini is the default provider:
 
 ```bash
 export GEMINI_API_KEY=your_key_here
+```
+
+For OpenAI image generation, set:
+
+```bash
 export OPENAI_API_KEY=your_key_here
 ```
 
@@ -56,7 +61,19 @@ slidegen slide "Your prompt" -d ./slides -n 01 -m gemini-3-pro-image-preview
 # With OpenAI image generation 2.0
 slidegen slide "A clean 16:9 product strategy slide" --provider openai
 slidegen slide "A clean 16:9 product strategy slide" -m gpt-image-2
+slidegen slide "A wide executive summary slide" --provider openai --size 1536x864
 ```
+
+## Image providers
+
+`slidegen` supports two image providers:
+
+| Provider | Default model | Required env var | Notes |
+|----------|---------------|------------------|-------|
+| Gemini | `gemini-3-pro-image-preview` | `GEMINI_API_KEY` | Default when no provider or OpenAI model is specified |
+| OpenAI | `gpt-image-2` | `OPENAI_API_KEY` | Selected with `--provider openai` or any `gpt-image-*` / `dall-e-*` model |
+
+OpenAI uses `1536x864` by default, a 16:9 size for slide generation. You can override it with `--size`, for example `--size 1024x1024` or `--size 1536x864`.
 
 ### Assemble into PowerPoint
 
@@ -124,8 +141,7 @@ Options:
 ```
 
 OpenAI support uses `gpt-image-2` by default when `--provider openai` is selected.
-Passing `-m gpt-image-2` also selects the OpenAI provider automatically. The default
-OpenAI size is `1536x864`, a 16:9 resolution supported by `gpt-image-2`.
+Passing `-m gpt-image-2` also selects the OpenAI provider automatically.
 
 ### `assemble`
 
