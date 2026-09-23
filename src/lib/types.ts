@@ -15,6 +15,11 @@ export interface SlideOptions {
   format: OutputFormat;
   style?: string;
   size?: string;
+  /** Images sent as style references (OpenAI only). */
+  refs?: string[];
+  /** Real text for the slide, laid over the art by `assemble`. */
+  headline?: string;
+  sub?: string;
 }
 
 export interface AssembleOptions {

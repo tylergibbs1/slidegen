@@ -75,6 +75,23 @@ slidegen slide "A wide executive summary slide" --provider openai --size 1536x86
 
 OpenAI uses `1536x864` by default, a 16:9 size for slide generation. You can override it with `--size`, for example `--size 1024x1024` or `--size 1536x864`.
 
+### Real text, not painted text
+
+Image models misspell and mis-draw numbers. Pass `--headline` (and optionally `--sub`) and the image is generated with no text and a calm left side; the words are saved beside it as `NN.json`, and `assemble` sets them as editable Geist text. Use this for every figure and claim.
+
+```bash
+slidegen slide "A cart of patient charts, one marked" -s grayhaven -p openai \
+  --headline "Triage across 3 TB of patient records." --sub "About 93% accurate."
+```
+
+### Keep a deck consistent
+
+`--ref <image>` (repeatable, OpenAI only) sends a style reference, so every slide shares one technique. Use slide 1, or a brand image.
+
+```bash
+slidegen slide "Close on hands sorting folders" -s grayhaven -p openai -r slides/01.png
+```
+
 ### Assemble into PowerPoint
 
 ```bash
@@ -120,6 +137,8 @@ slidegen slide "Title slide: Q4 RESULTS" -s vercel
     <td>Geist design system, Swiss grid, flat monochrome</td>
   </tr>
 </table>
+
+A fourth preset, `grayhaven`, carries Grayhaven's design system (warm grey paper, dithered retro-futurist art, one Runlayer-gold mark, Geist only).
 
 Styles are prepended to your prompt automatically. You can still pass raw prompts without `-s` for full control.
 
@@ -169,6 +188,7 @@ Options:
 - [`breadcrumb-engineer.pptx`](examples/breadcrumb-engineer.pptx) — dark engineering notebook
 - [`breadcrumb-apple.pptx`](examples/breadcrumb-apple.pptx) — clean Apple keynote
 - [`breadcrumb-vercel.pptx`](examples/breadcrumb-vercel.pptx) — dark Vercel developer aesthetic
+- [`grayhaven-sample.pptx`](examples/grayhaven-sample.pptx) — three Grayhaven slides: site art as `--ref`, real text via `--headline`
 
 ## Exit codes
 

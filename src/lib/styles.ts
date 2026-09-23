@@ -71,6 +71,20 @@ Layout:
 `,
   },
 
+  grayhaven: {
+    name: "grayhaven",
+    description: "Grayhaven: warm grey print, one Runlayer-gold mark, dithered retro-futurist art",
+    prefix: `A slide for Grayhaven, an applied AI lab for healthcare, legal and banking, in the design of grayhavenindustries.com (its DESIGN.md). Aspect ratio: 16:9.
+Background: flat warm grey paper (#F4F1EA), no texture, no gradient, no vignette.
+Frame: the slide sits inside a thin hairline border (#DBD5C9) with generous margins; any structure is drawn as thin hairline cells that share their borders, never floating cards with gaps. Square corners everywhere; no rounded shapes, no shadows, no glow.
+Colour: warm greys only, from paper (#F4F1EA) to ink (#161411), and one accent, Runlayer gold (#A48977), used on exactly one object: the one thing a person decides on. Never gold text, never gold borders, never a second accent.
+Imagery: an optimistic 1960s World's Fair rendering of calm, well-run work, printed as a fine monochrome dither in three tones (paper, mid grey #8B8477, ink #161411): visible square dots, like a toned lithograph. Show the work itself, not a building: hands, files, desks, records. The single marked object is solid gold. Or, for abstract ideas, a smooth matte stone form in the same dither. No people in suits, no handshakes, no glowing brains, no robots, no stock symbols (stethoscopes, scales of justice), no screenshots or mock software.
+Typography: if any text appears, Geist only, near-black ink (#161411), medium weight, tight tracking, sentence case, never a monospace face, never a small label above a heading. One idea per slide.
+Overall: calm, exact and trustworthy, like a well-made printed document. Generous empty space.
+
+`,
+  },
+
   vercel: {
     name: "vercel",
     description: "Dark, sharp Vercel/Next.js developer aesthetic",

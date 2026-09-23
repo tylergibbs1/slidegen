@@ -2,7 +2,8 @@ import { mkdir, readdir, writeFile } from "fs/promises";
 import { join, extname } from "path";
 import { generateSlideImage } from "../lib/image";
 import { logSlideDone, logSlideFail } from "../lib/logger";
-import { getStyle } from "../lib/styles";
+import { getStyle, listStyles } from "../lib/styles";
+import { TEXT_SAFE_PROMPT, type SlideText } from "../lib/text";
 import type { SlideOptions } from "../lib/types";
 import { EXIT_SUCCESS, EXIT_GENERATION_FAIL, EXIT_INPUT_ERROR } from "../lib/types";
 
@@ -49,11 +50,19 @@ export async function runSlide(opts: SlideOptions): Promise<number> {
   if (opts.style) {
     const style = getStyle(opts.style);
     if (!style) {
-      logSlideFail(format, `Unknown style: ${opts.style}. Available: engineer, apple, vercel`, 0);
+      logSlideFail(format, `Unknown style: ${opts.style}. Available: ${listStyles().join(", ")}`, 0);
       return EXIT_INPUT_ERROR;
     }
     prompt = style.prefix + prompt;
   }
+
+  // Words are never drawn by the image model when the slide has real text:
+  // a generated "93%" can come back as "98%". The art leaves room, and
+  // `assemble` sets the words as editable text from the sidecar file.
+  const text: SlideText | undefined = opts.headline
+    ? { headline: opts.headline, ...(opts.sub ? { sub: opts.sub } : {}) }
+    : undefined;
+  if (text) prompt = prompt + TEXT_SAFE_PROMPT;
 
   const start = performance.now();
 
@@ -66,12 +75,14 @@ export async function runSlide(opts: SlideOptions): Promise<number> {
       model,
       provider: opts.provider,
       size: opts.size,
+      refs: opts.refs,
     });
     const ext = mimeToExt(result.mimeType);
     const filename = `${name}${ext}`;
     const filePath = join(dir, filename);
 
     await writeFile(filePath, result.imageData);
+    if (text) await writeFile(join(dir, `${name}.json`), JSON.stringify(text, null, 2) + "\n");
 
     const elapsed = Math.round(performance.now() - start);
     logSlideDone(format, filePath, elapsed);

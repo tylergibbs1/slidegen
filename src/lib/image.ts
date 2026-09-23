@@ -7,6 +7,7 @@ interface GenerateSlideImageOptions {
   model?: string;
   provider?: ImageProvider;
   size?: string;
+  refs?: string[];
 }
 
 interface GenerateImageResult {
@@ -36,11 +37,16 @@ export async function generateSlideImage({
   model,
   provider,
   size,
+  refs,
 }: GenerateSlideImageOptions): Promise<GenerateImageResult> {
   const resolvedProvider = inferImageProvider(model ?? DEFAULT_GEMINI_MODEL, provider);
 
   if (resolvedProvider === "openai") {
-    return generateOpenAIImage({ prompt, model: model ?? DEFAULT_OPENAI_IMAGE_MODEL, size });
+    return generateOpenAIImage({ prompt, model: model ?? DEFAULT_OPENAI_IMAGE_MODEL, size, refs });
+  }
+
+  if (refs?.length) {
+    throw new Error("Reference images (--ref) are supported with --provider openai only");
   }
 
   return generateGeminiImage(prompt, model ?? DEFAULT_GEMINI_MODEL);

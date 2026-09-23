@@ -34,7 +34,12 @@ Usage:
 Options:
   -d, --dir <path>     Output directory (default: ./slides)
   -n, --name <name>    File name without extension (default: auto-increment)
-  -s, --style <name>   Built-in style preset (engineer, apple, vercel)
+  -s, --style <name>   Built-in style preset (engineer, apple, vercel, grayhaven)
+  -r, --ref <path>     Style reference image; repeatable (OpenAI only). Use
+                       slide 1 or a brand image so the deck shares one look
+      --headline <t>   Real headline, set as editable text by assemble; the
+                       image is then generated with no text and room for it
+      --sub <text>     Real subline under the headline
   -p, --provider <p>   Image provider: gemini or openai (default: inferred from model)
   -m, --model <model>  Image model to use (default: gemini-3-pro-image-preview)
       --size <size>    OpenAI image size (default: 1536x864 for gpt-image-2)
@@ -44,7 +49,8 @@ Options:
 Styles:
   engineer   Dark engineering notebook, white line art, orange (#F97316) accent
   apple      Clean white keynote, SF Pro typography, blue (#0071E3) accent
-  vercel     Dark developer aesthetic, sharp lines, monochrome with glow`;
+  vercel     Dark developer aesthetic, sharp lines, monochrome with glow
+  grayhaven  Warm grey print, dithered retro-futurist art, one gold mark`;
 
 const ASSEMBLE_HELP = `slidegen assemble — combine images into a PowerPoint file
 
@@ -115,6 +121,12 @@ async function main(): Promise<number> {
     const dir = parseFlag(args, "-d", "--dir") ?? "./slides";
     const name = parseFlag(args, "-n", "--name");
     const style = parseFlag(args, "-s", "--style");
+    const refs: string[] = [];
+    for (let ref = parseFlag(args, "-r", "--ref"); ref; ref = parseFlag(args, "-r", "--ref")) {
+      refs.push(ref);
+    }
+    const headline = parseFlag(args, "", "--headline");
+    const sub = parseFlag(args, "", "--sub");
     let provider: ImageProvider | undefined;
     try {
       provider = parseProvider(parseFlag(args, "-p", "--provider"));
@@ -139,7 +151,7 @@ async function main(): Promise<number> {
       return EXIT_INPUT_ERROR;
     }
 
-    return runSlide({ prompt, dir, name, style, model, provider, size, format });
+    return runSlide({ prompt, dir, name, style, model, provider, size, format, refs, headline, sub });
   }
 
   if (command === "assemble") {
